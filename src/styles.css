@@ -2122,6 +2122,7 @@ h1 em {
   box-shadow: 0 10px 24px rgba(37, 211, 102, 0.45);
 }
 
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;

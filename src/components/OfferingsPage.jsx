@@ -3,6 +3,7 @@ import { CheckCircle2, Sparkles, Compass, Pizza, Headphones, Coffee, Film, Messa
 import { playStamp, playChime } from "../utils/audio";
 import { launchHearts } from "../utils/confetti";
 import { openWhatsAppDirectly } from "../utils/whatsapp";
+import { trackActivity } from "../utils/tracker";
 
 const COUPONS = [
   {
@@ -57,6 +58,8 @@ export default function OfferingsPage({ onNavigateNext }) {
 
   const handleRedeem = (id) => {
     if (redeemed[id]) return;
+    const coupon = COUPONS.find((c) => c.id === id);
+    trackActivity("Claimed Peace Bribe 🎁", `${coupon ? coupon.title : id} (${coupon ? coupon.code : ""})`);
     playStamp();
     launchHearts(25);
     setRedeemed((prev) => ({ ...prev, [id]: true }));
@@ -65,6 +68,7 @@ export default function OfferingsPage({ onNavigateNext }) {
   const count = Object.keys(redeemed).length;
 
   const sendSingleCouponToWhatsApp = (coupon) => {
+    trackActivity("Sent Bribe to WhatsApp 💬", `Sent coupon: ${coupon.title}`);
     playChime();
     const msg = `Hey Sayan! 💌 I just claimed: ${coupon.title}!\nRemember your promise! 😋💗`;
     openWhatsAppDirectly("919395639289", msg);
@@ -78,6 +82,7 @@ export default function OfferingsPage({ onNavigateNext }) {
 
     if (claimedList.length === 0) return;
 
+    trackActivity("Sent All Claimed Bribes on WhatsApp 💌", `Claimed ${claimedList.length} bribes: ${claimedList.map(c => c.title).join(", ")}`);
     const items = claimedList.map((c, i) => `${i + 1}. ${c.title}`).join("\n");
     const msg = `Hey Sayan! 💌 I just redeemed these peace bribes from Sayan's Diary:\n\n${items}\n\nYou have to fulfill them, promise! 🥺💗`;
 

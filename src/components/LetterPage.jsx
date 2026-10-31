@@ -4,6 +4,7 @@ import RunawayButton from "./RunawayButton";
 import CelebrationModal from "./CelebrationModal";
 import { launchHearts } from "../utils/confetti";
 import { playChime } from "../utils/audio";
+import { trackActivity } from "../utils/tracker";
 
 export default function LetterPage({ accepted, setAccepted, onNavigateNext }) {
   const [opened, setOpened] = useState(false);
@@ -11,6 +12,7 @@ export default function LetterPage({ accepted, setAccepted, onNavigateNext }) {
   const [showCelebration, setShowCelebration] = useState(false);
 
   const handleForgive = () => {
+    trackActivity("Apology Accepted! 💗", `BK clicked 'Okay, maaf kiya' (after ${evades} evasions)`);
     setAccepted(true);
     setOpened(true);
     playChime();
@@ -125,7 +127,12 @@ export default function LetterPage({ accepted, setAccepted, onNavigateNext }) {
                 Okay, maaf kiya <Heart size={17} fill="currentColor" />
               </button>
 
-              <RunawayButton onEvade={(c) => setEvades(c)} />
+              <RunawayButton
+                onEvade={(c) => {
+                  setEvades(c);
+                  trackActivity("Still Angry Button Evaded 🏃‍♂️", `Dodged mouse/touch (${c} time${c > 1 ? "s" : ""})`);
+                }}
+              />
             </div>
 
             {evades > 0 && (

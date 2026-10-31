@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Sparkles, Heart, Star, Camera, Cat, Smile, Award } from "lucide-react";
 import { playChime } from "../utils/audio";
 import { launchHearts } from "../utils/confetti";
+import { trackActivity } from "../utils/tracker";
 
 const POLAROIDS = [
   {
@@ -52,6 +53,7 @@ export default function ScrapbookPage({ onNavigateNext }) {
   ]);
 
   const addSticker = (symbol) => {
+    trackActivity("Stuck Scrapbook Doodle ✨", `Added doodle sticker: ${symbol}`);
     playChime();
     launchHearts(10);
     const newSticker = {

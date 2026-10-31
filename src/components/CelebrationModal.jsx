@@ -3,6 +3,7 @@ import { Sparkles, Send, X } from "lucide-react";
 import { launchHearts } from "../utils/confetti";
 import { playChime } from "../utils/audio";
 import { openWhatsAppDirectly } from "../utils/whatsapp";
+import { trackActivity } from "../utils/tracker";
 
 export default function CelebrationModal({ isOpen, onClose }) {
   const [countdown, setCountdown] = useState(2);
@@ -74,7 +75,10 @@ export default function CelebrationModal({ isOpen, onClose }) {
         <div className="celebration-actions">
           <button
             className="whatsapp-direct-btn"
-            onClick={() => openWhatsAppDirectly()}
+            onClick={() => {
+              trackActivity("Opened WhatsApp Directly 💬", "From Celebration Modal");
+              openWhatsAppDirectly();
+            }}
           >
             <span>Open WhatsApp Directly</span>
             <Send size={16} />

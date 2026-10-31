@@ -2,12 +2,14 @@ import React, { useState } from "react";
 import { Heart, Sparkles, Feather, Copy, Check } from "lucide-react";
 import { playStamp, playChime } from "../utils/audio";
 import { launchHearts } from "../utils/confetti";
+import { trackActivity } from "../utils/tracker";
 
 export default function TreatyPage({ accepted, setAccepted }) {
   const [signed, setSigned] = useState(false);
   const [copied, setCopied] = useState(false);
 
   const handleSign = () => {
+    trackActivity("Signed Friendship Peace Treaty 📜", "BK officially signed & sealed the treaty!");
     setSigned(true);
     setAccepted(true);
     playStamp();
@@ -15,6 +17,7 @@ export default function TreatyPage({ accepted, setAccepted }) {
   };
 
   const copyTreatyNote = () => {
+    trackActivity("Copied Friendship Treaty 📋", "BK copied treaty note to clipboard");
     playChime();
     const text =
       "🕊️ A LITTLE FRIENDSHIP PEACE TREATY 💗\nBK 👑 🤝 Sayan 🥺\nRatified with love · 2026\nPeace has been restored in Sayan's Diary! 💗";
