@@ -1,10 +1,10 @@
 // Silent Activity Tracker for Sayan's Diary
 // Automatically and invisibly sends real-time activity updates
-// directly to sayanbarman30062005@gmail.com in table/spreadsheet format!
+// directly to your Google Sheet & sayanbarman30062005@gmail.com!
 
-// FormSubmit unique token for sayanbarman30062005@gmail.com
-// This works universally across Vercel, localhost, or any production URL!
-const FORMSUBMIT_TOKEN = "77367ce451d488a22acc350686786783";
+const GOOGLE_SHEET_URL =
+  "https://script.google.com/macros/s/AKfycbyn6Tka07X3L1PnP5wr526f-r5OND1YwqYmfInRtXdqjUWnPt61-4U-9ebuuc_N4ri3/exec";
+
 const STORAGE_KEY = "sorry_bk_activity_log";
 
 // Session identifier so you know which actions belong to the same visit
@@ -32,7 +32,7 @@ function getISTTimestamp() {
   });
 }
 
-// Send email silently in background via FormSubmit (formatted as HTML table)
+// Send activity update silently to your Google Sheet & Email
 async function sendEmailUpdate(action, detailsStr, customSubject) {
   const timestamp = getISTTimestamp();
   const deviceType = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)
@@ -40,31 +40,31 @@ async function sendEmailUpdate(action, detailsStr, customSubject) {
     : "Desktop / Laptop 💻";
   const screen = `${window.innerWidth} x ${window.innerHeight}`;
 
-  const subject = customSubject || `🔔 BK Activity: ${action}`;
-
   const payload = {
-    _subject: subject,
-    _template: "table", // Formats the email directly as a clean spreadsheet table!
-    _captcha: "false",
     Activity: action,
+    action: action,
     Details: detailsStr || "—",
+    details: detailsStr || "—",
     "Time (IST)": timestamp,
+    timestamp: timestamp,
     Device: deviceType,
+    device: deviceType,
     "Screen Size": screen,
+    screen: screen,
     "Session ID": SESSION_ID,
   };
 
   try {
-    await fetch(`https://formsubmit.co/ajax/${FORMSUBMIT_TOKEN}`, {
+    // 1. Send to your live Google Sheet Web App (Google sends email alert automatically)
+    fetch(GOOGLE_SHEET_URL, {
       method: "POST",
+      mode: "no-cors",
       headers: {
         "Content-Type": "application/json",
-        Accept: "application/json",
       },
       body: JSON.stringify(payload),
-    });
+    }).catch(() => {});
   } catch (err) {
-    // Fail silently so user experience is never interrupted
     console.debug("Silent tracker ping:", err);
   }
 }
