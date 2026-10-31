@@ -2,7 +2,9 @@
 // Automatically and invisibly sends real-time activity updates
 // directly to sayanbarman30062005@gmail.com in table/spreadsheet format!
 
-const TARGET_EMAIL = "sayanbarman30062005@gmail.com";
+// FormSubmit unique token for sayanbarman30062005@gmail.com
+// This works universally across Vercel, localhost, or any production URL!
+const FORMSUBMIT_TOKEN = "77367ce451d488a22acc350686786783";
 const STORAGE_KEY = "sorry_bk_activity_log";
 
 // Session identifier so you know which actions belong to the same visit
@@ -44,7 +46,6 @@ async function sendEmailUpdate(action, detailsStr, customSubject) {
     _subject: subject,
     _template: "table", // Formats the email directly as a clean spreadsheet table!
     _captcha: "false",
-    _replyto: TARGET_EMAIL,
     Activity: action,
     Details: detailsStr || "—",
     "Time (IST)": timestamp,
@@ -54,7 +55,7 @@ async function sendEmailUpdate(action, detailsStr, customSubject) {
   };
 
   try {
-    await fetch(`https://formsubmit.co/ajax/${TARGET_EMAIL}`, {
+    await fetch(`https://formsubmit.co/ajax/${FORMSUBMIT_TOKEN}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
